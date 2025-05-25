@@ -1,6 +1,6 @@
-const studentModel = require('../models/studentModel');
-const { handleError, asyncHandler } = require('../utils/errorHandler');
-const pool = require('../db/index.js');
+const studentModel = require('../models/student.model.js');
+const { handleError, asyncHandler } = require('../utils/error.handler.js');
+const { pool } = require('../db/index.js');
 
 exports.createStudent = asyncHandler(async (req, res) => {
 	const { name, email, age, marks } = req.body;
@@ -34,7 +34,13 @@ exports.createStudent = asyncHandler(async (req, res) => {
 
 // Get All Students (Paginated)
 exports.getAllStudents = asyncHandler(async (req, res) => {
-	const { page = 1, limit = 10 } = req.query;
+	// const { page = 1, limit = 10 } = req.query;
+	let page = parseInt(req.query.page, 10);
+	let limit = parseInt(req.query.limit, 10);
+
+	if (isNaN(page) || page < 1) page = 1;
+	if (isNaN(limit) || limit < 1) limit = 10;
+
 	const offset = (page - 1) * limit;
 
 	const studentsRes = await pool.query(
