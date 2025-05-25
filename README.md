@@ -1,0 +1,2 @@
+# NadSoft
+Student management app
